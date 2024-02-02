@@ -1,6 +1,9 @@
 package com.example.devoir3androide
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +16,7 @@ import kotlinx.coroutines.*
 class FormeUser : AppCompatActivity() {
     @SuppressLint("MissingInflatedId", "ResourceAsColor")
     lateinit var db : DatabaseDara
+    lateinit var sharedPreference: SharedPreferences
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +55,7 @@ class FormeUser : AppCompatActivity() {
                 errorFormeUser.setText("")
                 errorFormeUser.visibility = View.INVISIBLE
                 val user = User(userNameText, userEmailText, userPasswordText)
+                sharedPreference = this.getSharedPreferences("etat_app", MODE_PRIVATE)
                 runBlocking {
                     val existingUser : User? = db.findUser(user)
                     if (existingUser != null) {
@@ -65,6 +70,15 @@ class FormeUser : AppCompatActivity() {
                             errorFormeUser.setText("Compte créé avec succès")
                             errorFormeUser.setBackgroundColor(R.color.purple_700)
                             errorFormeUser.visibility = View.VISIBLE
+                            // On mémorise la connexion
+                            val edit = sharedPreference.edit()
+                            edit.putBoolean("estIdentifier", true)
+                            edit.putString("email", userEmailText)
+                            edit.putString("password", userPasswordText)
+                            edit.commit()
+                            Intent(applicationContext, ListeEtudiant::class.java).also {
+                                startActivity(it)
+                            }
                         }
                     }
                 }

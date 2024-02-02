@@ -25,6 +25,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".FormeUser"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
