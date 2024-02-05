@@ -7,7 +7,6 @@ import androidx.room.Update
 
 @Dao
 interface AppDao {
-
     @Insert
     fun insertUser(user: User)
 
